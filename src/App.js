@@ -1,26 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import KeyTouch from './KeysTouch';
+import Output from './Output';
 import './App.css';
+import Exemple from './Exemple';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    result: '' /*State initial*/
+  }
+
+  /*Méthode pour l'affichage des touches au click avec en parametre bottonName*/
+  buttonPressed = buttonName => {
+    if (buttonName === '=') {
+      this.calculate(); /*Appel de la méthode calculate*/
+    } else if
+      (buttonName === 'C') {
+      this.reset(); /*Appel de la méthode reset*/
+    } else if
+      (buttonName === 'CE') {
+      this.backSpace(); /*Appel de la méthode backSpace*/
+    } else
+      this.setState({
+        result: this.state.result + buttonName 
+      })
+  };
+
+  /*Les fonctions*/
+  backSpace = () => {
+    this.setState({
+      result: this.state.result.slice(0, -1)
+    });
+  };
+
+  reset = () => {
+    this.setState({
+      result: ""
+    });
+  };
+
+  /* eval() permet d'évaluer du code JavaScript représenté sous forme d'une chaîne de caractères */
+  calculate = () => {
+    this.setState({
+      result: eval(this.state.result)
+    });
+  }
+/*L'affichage*/
+  render() {
+    return (
+      <div className="App">
+        <div className="calc-body">
+        <Exemple />
+          <Output result={this.state.result} />
+          <KeyTouch buttonPressed={this.buttonPressed} />
+        </div>
+      </div>
+
+    )
+  }
 }
 
 export default App;
